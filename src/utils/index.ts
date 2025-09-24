@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { UserRole } from '@/types';
 import type { TripDetailsType } from '@/types';
 
@@ -224,3 +225,9 @@ const TripDetails = () => {
   // Rest of your component logic...
 };
 */
+const logout = () => {
+  const navigate = useNavigate();
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  navigate('/login');
+};

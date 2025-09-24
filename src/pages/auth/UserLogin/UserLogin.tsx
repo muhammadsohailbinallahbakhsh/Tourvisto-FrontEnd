@@ -43,30 +43,6 @@ const demoCredentials = {
 };
 
 const UserLogin = () => {
-  //const weather = useGetWeather();
-  //console.log('Weather Data:', weather.data);
-  // const createWeatherMutation = useCreateWeatherMutation();
-
-  // useEffect(() => {
-  //   createWeatherMutation.mutate({
-  //     date: '2025-09-21T08:32:58.0140076+05:00',
-  //     temperature: 25,
-  //     summary: 'Sunny',
-  //   });
-  // }, []);
-
-  // if (createWeatherMutation.isError) {
-  //   console.log('Error creating weather:', createWeatherMutation.error);
-  // }
-
-  // if (createWeatherMutation.isSuccess) {
-  //   console.log('Successfully created weather:', createWeatherMutation.data);
-  // }
-
-  // if (createWeatherMutation.isPending) {
-  //   console.log('Creating weather...');
-  // }
-
   const registerUserMutation = useRegisterUserMutation();
   const loginUserMutation = useLoginUserMutation();
 
@@ -100,14 +76,8 @@ const UserLogin = () => {
   const handleSubmitClick = () => {
     if (isSignUp) {
       registerUserMutation.mutate({ email, password });
-      if (registerUserMutation.isSuccess && registerUserMutation.data) {
-        const { token, refreshToken } = registerUserMutation.data.data;
-      }
     } else {
       loginUserMutation.mutate({ email, password });
-      if (loginUserMutation.isSuccess && loginUserMutation.data) {
-        const { token, refreshToken } = loginUserMutation.data.data;
-      }
     }
   };
 

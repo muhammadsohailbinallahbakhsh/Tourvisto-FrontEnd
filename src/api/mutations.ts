@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { createWeather, registerUser, loginUser } from './api';
 import type {
@@ -30,8 +31,12 @@ export function useRegisterUserMutation() {
     onError: (error) => {
       console.log('Error occured while registering the user:', error);
     },
-    onSuccess: () => {
-      console.log('successfully registered user');
+    onSuccess: (response) => {
+      const navigate = useNavigate();
+      const { token, refreshToken } = response.data;
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      navigate('/dashboard');
     },
   });
 }
@@ -45,8 +50,12 @@ export function useLoginUserMutation() {
     onError: () => {
       console.log('Error occured while logging in the user');
     },
-    onSuccess: () => {
-      console.log('successfully logged in user');
+    onSuccess: (response) => {
+      const navigate = useNavigate();
+      const { token, refreshToken } = response.data;
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      navigate('/dashboard');
     },
   });
 }
