@@ -32,11 +32,10 @@ export function useRegisterUserMutation() {
       console.log('Error occured while registering the user:', error);
     },
     onSuccess: (response) => {
-      const navigate = useNavigate();
       const { token, refreshToken } = response.data;
       localStorage.setItem('accessToken', token);
       localStorage.setItem('refreshToken', refreshToken);
-      navigate('/dashboard');
+      window.location.href = '/dashboard';
     },
   });
 }
@@ -51,11 +50,10 @@ export function useLoginUserMutation() {
       console.log('Error occured while logging in the user');
     },
     onSuccess: (response) => {
-      const navigate = useNavigate();
       const { token, refreshToken } = response.data;
       localStorage.setItem('accessToken', token);
       localStorage.setItem('refreshToken', refreshToken);
-      navigate('/dashboard');
+      window.location.href = '/dashboard';
     },
   });
 }
