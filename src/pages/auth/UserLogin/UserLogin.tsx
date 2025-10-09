@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { data, useParams } from 'react-router';
-
+import { useSignIn, useSignUp, useSession } from '@clerk/clerk-react';
 import { useGetWeather } from '@/api/quries';
 import {
   useCreateWeatherMutation,
   useRegisterUserMutation,
   useLoginUserMutation,
+  useClerkCallbackMutation,
 } from '@/api/mutations';
 
 import * as userSlice from '@/features/userSlice';
@@ -32,9 +33,6 @@ import { Button } from '@/components/ui/button';
 const socialProviders = [
   { name: 'Google', icon: icons.googleIcon, key: 'google' },
   { name: 'Facebook', icon: icons.googleIcon, key: 'facebook' },
-  { name: 'LinkedIn', icon: icons.googleIcon, key: 'linkedin' },
-  { name: 'GitHub', icon: icons.googleIcon, key: 'github' },
-  { name: 'Microsoft', icon: icons.googleIcon, key: 'microsoft' },
 ];
 
 const demoCredentials = {
@@ -45,7 +43,10 @@ const demoCredentials = {
 const UserLogin = () => {
   const registerUserMutation = useRegisterUserMutation();
   const loginUserMutation = useLoginUserMutation();
-
+  const clerkCallbackMutation = useClerkCallbackMutation();
+  const { signIn } = useSignIn();
+  const { signUp } = useSignUp();
+  const { session } = useSession();
   const dispatch = useAppDispatch();
   const { userType } = useParams();
   const [showAll, setShowAll] = useState(false);
@@ -66,6 +67,20 @@ const UserLogin = () => {
       setPassword(demoCredentials.admin.password);
     }
   }, [demoMode]);
+
+  const handleSocialLogin = async (provider: string) => {
+    if (!signIn) return;
+
+    try {
+      await signIn.authenticateWithRedirect({
+        strategy: `oauth_${provider}` as any,
+        redirectUrl: '/auth/sso-callback',
+        redirectUrlComplete: '/dashboard',
+      });
+    } catch (error) {
+      console.error(`Error signing in with ${provider}:`, error);
+    }
+  };
 
   // useEffect(() => {
   //   if (user && !user.emailAddresses[0].verification?.status === 'verified') {
@@ -117,6 +132,7 @@ const UserLogin = () => {
                 <Button
                   key={provider.key}
                   className='w-full flex-center gap-2 border border-light-100 rounded-[8px] shadow-100 py-4 sm:py-5 px-4 p-18-regular leading-6 cursor-pointer bg-primary-100 text-white'
+                  onClick={() => handleSocialLogin(provider.key)}
                 >
                   <img src={provider.icon} alt={`${provider.name} icon`} />
                   Continue with {provider.name}

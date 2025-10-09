@@ -1,21 +1,9 @@
-import { useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
-import { createWeather, registerUser, loginUser } from './api';
-import type {
-  CreateWeatherResponse,
-  SignUpRequest,
-  WeatherResponse,
-} from '@/types';
+import { createWeather, registerUser, loginUser, clerkCallback } from './api';
 
 export function useCreateWeatherMutation() {
   return useMutation({
-    mutationFn: (data: WeatherResponse) => createWeather(data),
-    onMutate: () => {
-      console.log('Mutate on creating weather');
-    },
-    onError: () => {
-      console.log('Error occured while creating the weather');
-    },
+    mutationFn: (data: any) => createWeather(data),
     onSuccess: () => {
       console.log('successfully created weather');
     },
@@ -24,13 +12,8 @@ export function useCreateWeatherMutation() {
 
 export function useRegisterUserMutation() {
   return useMutation({
-    mutationFn: (data: SignUpRequest) => registerUser(data),
-    onMutate: () => {
-      console.log('Mutate on registering user');
-    },
-    onError: (error) => {
-      console.log('Error occured while registering the user:', error);
-    },
+    mutationFn: (data: { email: string; password: string }) =>
+      registerUser(data),
     onSuccess: (response) => {
       const { token, refreshToken } = response.data;
       localStorage.setItem('accessToken', token);
@@ -42,18 +25,27 @@ export function useRegisterUserMutation() {
 
 export function useLoginUserMutation() {
   return useMutation({
-    mutationFn: (data: SignUpRequest) => loginUser(data),
-    onMutate: () => {
-      console.log('Mutate on logging in user');
-    },
-    onError: () => {
-      console.log('Error occured while logging in the user');
-    },
+    mutationFn: (data: { email: string; password: string }) => loginUser(data),
     onSuccess: (response) => {
       const { token, refreshToken } = response.data;
       localStorage.setItem('accessToken', token);
       localStorage.setItem('refreshToken', refreshToken);
       window.location.href = '/dashboard';
+    },
+  });
+}
+
+export function useClerkCallbackMutation() {
+  return useMutation({
+    mutationFn: (userId: string) => clerkCallback(userId),
+    onSuccess: (response) => {
+      const { token, refreshToken } = response.data;
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      window.location.href = '/dashboard';
+    },
+    onError: (error) => {
+      console.error('Clerk callback failed:', error);
     },
   });
 }

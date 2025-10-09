@@ -25,7 +25,7 @@ import {
   PaymentConfirmation,
 } from './pages/public';
 import { NotFound, Forbidden } from './pages/errors';
-import { UserLogin, EmailVerification } from './pages/auth';
+import { UserLogin, EmailVerification, SSOCallback } from './pages/auth';
 
 function App() {
   return (
@@ -76,6 +76,7 @@ function App() {
 
           <Route path='auth/:userType' element={<UserLogin />} />
           <Route path='auth/verify-email' element={<EmailVerification />} />
+          <Route path='auth/sso-callback' element={<SSOCallback />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>
