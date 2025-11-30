@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useUser } from '@clerk/clerk-react';
-import { useClerkCallbackMutation } from '@/api/mutations';
+//import { useClerkCallbackMutation } from '@/api/mutations';
 
 const SSOCallback = () => {
   const navigate = useNavigate();
   const { user, isLoaded } = useUser();
-  const clerkCallbackMutation = useClerkCallbackMutation();
+  //const clerkCallbackMutation = useClerkCallbackMutation();
   const [hasProcessed, setHasProcessed] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const SSOCallback = () => {
 
       try {
         console.log('Sending user ID to backend:', user.id);
-        await clerkCallbackMutation.mutateAsync(user.id);
+        //await clerkCallbackMutation.mutateAsync(user.id);
       } catch (error) {
         console.error('Failed to authenticate with backend:', error);
         setHasProcessed(false);
@@ -42,22 +42,22 @@ const SSOCallback = () => {
     };
 
     sendToBackend();
-  }, [isLoaded, user, hasProcessed, clerkCallbackMutation, navigate]);
+  }, [isLoaded, user, hasProcessed, navigate]);
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-50'>
       <div className='text-center bg-white p-8 rounded-lg shadow-md'>
         <h2 className='text-2xl font-semibold mb-4 text-gray-800'>
-          {clerkCallbackMutation.isPending
+          {/* {clerkCallbackMutation.isPending
             ? 'Authenticating...'
-            : 'Completing sign in...'}
+            : 'Completing sign in...'} */}
         </h2>
         <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary-100 mx-auto'></div>
-        {clerkCallbackMutation.isError && (
+        {/* {clerkCallbackMutation.isError && (
           <p className='mt-4 text-red-500 text-sm'>
             Authentication failed. Redirecting to login...
           </p>
-        )}
+        )} */}
       </div>
     </div>
   );

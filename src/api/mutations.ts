@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { createWeather, registerUser, loginUser, clerkCallback } from './api';
+import { createWeather, registerUser, loginUser } from './api';
 
 export function useCreateWeatherMutation() {
   return useMutation({
@@ -35,17 +35,17 @@ export function useLoginUserMutation() {
   });
 }
 
-export function useClerkCallbackMutation() {
-  return useMutation({
-    mutationFn: (userId: string) => clerkCallback(userId),
-    onSuccess: (response) => {
-      const { token, refreshToken } = response.data;
-      localStorage.setItem('accessToken', token);
-      localStorage.setItem('refreshToken', refreshToken);
-      window.location.href = '/dashboard';
-    },
-    onError: (error) => {
-      console.error('Clerk callback failed:', error);
-    },
-  });
-}
+// export function useClerkCallbackMutation() {
+//   return useMutation({
+//     mutationFn: (userId: string) => clerkCallback(userId),
+//     onSuccess: (response) => {
+//       const { token, refreshToken } = response.data;
+//       localStorage.setItem('accessToken', token);
+//       localStorage.setItem('refreshToken', refreshToken);
+//       window.location.href = '/dashboard';
+//     },
+//     onError: (error) => {
+//       console.error('Clerk callback failed:', error);
+//     },
+//   });
+// }

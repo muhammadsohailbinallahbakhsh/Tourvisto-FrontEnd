@@ -1,17 +1,6 @@
 import { useState, useEffect } from 'react';
-import { data, useParams } from 'react-router';
-import { useSignIn, useSignUp, useSession } from '@clerk/clerk-react';
-import { useGetWeather } from '@/api/quries';
-import {
-  useCreateWeatherMutation,
-  useRegisterUserMutation,
-  useLoginUserMutation,
-  useClerkCallbackMutation,
-} from '@/api/mutations';
-
-import * as userSlice from '@/features/userSlice';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { useAppSelector } from '@/hooks/useAppSelector';
+import { useParams } from 'react-router';
+import { useRegisterUserMutation, useLoginUserMutation } from '@/api/mutations';
 import { UserRole } from '@/types';
 import { isValidUserRole } from '@/utils';
 import icons from '@/constants/icons';
@@ -31,23 +20,18 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
 const socialProviders = [
-  { name: 'Google', icon: icons.googleIcon, key: 'google' },
-  { name: 'Facebook', icon: icons.googleIcon, key: 'facebook' },
+  { name: 'Google', icon: icons.googleIcon, key: 'Google' },
+  { name: 'Facebook', icon: icons.googleIcon, key: 'Facebook' },
 ];
 
 const demoCredentials = {
-  user: { email: 'demo@user.com', password: 'user123' },
-  admin: { email: 'demo@admin.com', password: 'admin123' },
+  user: { email: 'demo@user.com', password: 'User123!' },
+  admin: { email: 'demo@admin.com', password: 'Admin123!' },
 };
 
 const UserLogin = () => {
   const registerUserMutation = useRegisterUserMutation();
   const loginUserMutation = useLoginUserMutation();
-  const clerkCallbackMutation = useClerkCallbackMutation();
-  const { signIn } = useSignIn();
-  const { signUp } = useSignUp();
-  const { session } = useSession();
-  const dispatch = useAppDispatch();
   const { userType } = useParams();
   const [showAll, setShowAll] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -68,25 +52,15 @@ const UserLogin = () => {
     }
   }, [demoMode]);
 
-  const handleSocialLogin = async (provider: string) => {
-    if (!signIn) return;
+  const handleSocialLogin = (provider: string) => {
+    const baseUrl = import.meta.env.VITE_TurVistoAPI_BASE_URL;
+    const returnUrl = encodeURIComponent(
+      `${window.location.origin}/auth/callback`
+    );
 
-    try {
-      await signIn.authenticateWithRedirect({
-        strategy: `oauth_${provider}` as any,
-        redirectUrl: '/auth/sso-callback',
-        redirectUrlComplete: '/dashboard',
-      });
-    } catch (error) {
-      console.error(`Error signing in with ${provider}:`, error);
-    }
+    // Redirect to backend OAuth endpoint
+    window.location.href = `${baseUrl}external/login?provider=${provider}&returnUrl=${returnUrl}`;
   };
-
-  // useEffect(() => {
-  //   if (user && !user.emailAddresses[0].verification?.status === 'verified') {
-  //     navigate('/auth/verify-email');
-  //   }
-  // }, [user, navigate]);
 
   const handleSubmitClick = () => {
     if (isSignUp) {
@@ -176,6 +150,10 @@ const UserLogin = () => {
                   <Button
                     className='w-full border border-light-100 rounded-[8px] shadow-100 py-4 sm:py-5 px-4 p-18-regular leading-6 cursor-pointer bg-primary-100 text-white'
                     onClick={handleSubmitClick}
+                    disabled={
+                      registerUserMutation.isPending ||
+                      loginUserMutation.isPending
+                    }
                   >
                     {isSignUp ? 'Sign Up' : 'Sign In'}
                   </Button>
