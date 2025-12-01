@@ -1,0 +1,41 @@
+# Dependencies
+Client/node_modules/
+Server/bin/
+Server/obj/
+Server/.vs/
+Server/TourvistoAPI/bin/
+Server/TourvistoAPI/obj/
+
+# IDE
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Environment variables
+Client/.env
+Client/.env.local
+Client/.env.*.local
+Server/appsettings.Development.json
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+@TourvistoAPI_HostAddress = http://localhost:5232
+
+GET {{TourvistoAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
