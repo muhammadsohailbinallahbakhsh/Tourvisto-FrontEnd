@@ -14,6 +14,7 @@ Tourvisto/
 ## Setup
 
 ### Client
+
 ```bash
 cd Client
 npm install
@@ -21,6 +22,7 @@ npm run dev
 ```
 
 ### Server
+
 ```bash
 cd Server
 dotnet restore
@@ -36,6 +38,7 @@ dotnet run --project TourvistoAPI
 ## Next Steps
 
 If you want to preserve the full Git history from the original repositories:
+
 1. Create this new repository on GitHub
 2. Push this current state
 3. Optionally: Import the historical commits from the original repos using `git subtree` or `git filter-repo`
